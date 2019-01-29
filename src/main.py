@@ -1,59 +1,40 @@
 # isort:skip_file
 
-# unlock the device
-import boot  # noqa: F401
+from trezor import ui, io
 
-# prepare the USB interfaces, but do not connect to the host yet
-import usb
 
-from trezor import loop, wire, workflow, utils
+ui.display.backlight(ui.BACKLIGHT_NORMAL)
+#ui.display.backlight(ui.BACKLIGHT_NORMAL)
 
-# load applications
-import apps.homescreen
-import apps.management
-import apps.wallet
-import apps.ethereum
-import apps.lisk
-import apps.monero
-import apps.nem
-import apps.stellar
-import apps.ripple
-import apps.cardano
-import apps.tezos
+d = ui.display
 
-if __debug__:
-    import apps.debug
-else:
-    import apps.fido_u2f
+d.print("UART Test\n")
+d.print("---------\n")
 
-# boot applications
-apps.homescreen.boot()
-apps.management.boot()
-apps.wallet.boot()
-apps.ethereum.boot()
-apps.lisk.boot()
-apps.monero.boot()
-apps.nem.boot()
-apps.stellar.boot()
-apps.ripple.boot()
-apps.cardano.boot()
-apps.tezos.boot()
-if __debug__:
-    apps.debug.boot()
-else:
-    apps.fido_u2f.boot(usb.iface_u2f)
+d.print("Init UART... ")
 
-# initialize the wire codec and start the USB
-wire.setup(usb.iface_wire)
-if __debug__:
-    wire.setup(usb.iface_debug)
-usb.bus.open()
+uart = io.SBU()
+uart.set_uart(True)
+d.print("Done\n")
 
-# switch into unprivileged mode, as we don't need the extra permissions anymore
-utils.set_mode_unprivileged()
+uart.write("UART Initialized\r\n")
+uart.write("Reading and echo\r\n")
 
-# run main event loop and specify which screen is the default
-from apps.homescreen.homescreen import homescreen
+while True:
+    b = bytearray(4)
+    r = uart.read(b)
+    if r > 0:
+        try:
+            uart.write(bytes(b).decode())
+            uart.write("\r\n")
+            d.print("Received: {0}\n".format(bytes(b).decode()))
+            if b[0] == 65:
+                uart.write('\xba')
+            elif b[0] == 66:
+                uart.write('\xaa')
+        except Exception as e:
+            uart.write("Exception: {0}".format(e))
+            d.print(str(e))
+    else:
+        uart.write("Receive error\r\n")
 
-workflow.startdefault(homescreen)
-loop.run()
