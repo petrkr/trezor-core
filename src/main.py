@@ -52,18 +52,18 @@ class Snake(Tile):
 
     def _read_dir(self):
         b = bytearray(1)
-        if self.ctrl.read(b) < 0:
+        if self.ctrl.read(b) < 1:
             return
 
         ch = bytes(b).decode()
 
-        if ch == 'W':
+        if ch == 'w':
             self.direction = [-1, 0]
-        elif ch == 'S':
+        elif ch == 's':
             self.direction = [1, 0]
-        elif ch == 'A':
+        elif ch == 'a':
             self.direction = [0, 1]
-        elif ch == 'D':
+        elif ch == 'd':
             self.direction = [0, -1]
         x, y = self.direction
         x *= TILE_WIDTH
@@ -138,7 +138,7 @@ def main():
             snake.eat()
             apple.fall()
             snake.render()
-            lcd_screen.show()
+            lcd_screen.refresh()
         snake.move()
 
     lcd_screen.print("death...\n")
