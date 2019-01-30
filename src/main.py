@@ -53,7 +53,7 @@ class Snake(Tile):
 
     def _read_dir(self):
         b = bytearray(1)
-        self.ctrl.read(b)
+        self.ctrl.read(b, 10)
         ch = bytes(b).decode()
 
         if ch == 'a':
