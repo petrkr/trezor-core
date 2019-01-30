@@ -1,5 +1,6 @@
 # isort:skip_file
 
+import sys
 from trezor import ui, io
 from trezor.crypto import random
 from utime import sleep_ms
@@ -167,7 +168,7 @@ while True:
                 main()
         except Exception as e:
             uart.write("Exception: {0}".format(e))
-            d.print(str(e))
+            d.print(sys.print_exception(e))
     else:
         uart.write("Receive error\r\n")
 
