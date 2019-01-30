@@ -53,18 +53,16 @@ class Snake(Tile):
 
     def _read_dir(self):
         b = bytearray(1)
-        if self.ctrl.read(b) < 1:
-            return
-
+        self.ctrl.read(b)
         ch = bytes(b).decode()
 
-        if ch == 'w':
+        if ch == 'a':
             self.direction = [-1, 0]
         elif ch == 's':
             self.direction = [1, 0]
-        elif ch == 'a':
-            self.direction = [0, 1]
         elif ch == 'd':
+            self.direction = [0, 1]
+        elif ch == 'w':
             self.direction = [0, -1]
         x, y = self.direction
         x *= TILE_WIDTH
@@ -168,7 +166,6 @@ while True:
                 main()
         except Exception as e:
             uart.write("Exception: {0}".format(e))
-            d.print(sys.print_exception(e))
     else:
         uart.write("Receive error\r\n")
 
