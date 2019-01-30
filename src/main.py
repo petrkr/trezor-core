@@ -147,7 +147,7 @@ def main():
 #main()
 
 while True:
-    b = bytearray(1)
+    b = bytearray(4)
     r = uart.read(b)
     if r > 0:
         try:
@@ -162,10 +162,10 @@ while True:
                 uart.write("Running snake game")
                 uart.write("Snake game\r\n")
                 uart.write("Usage:\r\n")
-                uart.write("Use buttons A and D\r\n")
+                uart.write("Use buttons w, s, a and d\r\n")
                 main()
         except Exception as e:
             uart.write("Exception: {0}".format(e))
     else:
-        uart.write("Receive error\r\n")
+        uart.write("Receive timeout\r\n")
 
