@@ -27,7 +27,7 @@ uart.write("UART Initialized\r\n")
 
 SWIDTH = 240
 SHEIGHT = 240
-TILE_WIDTH = 4
+TILE_WIDTH = 8
 
 CTRL_SENS = 3
 
@@ -131,7 +131,7 @@ def main():
         apple.render()
         snake.render()
         lcd_screen.refresh()
-        sleep_ms(200)
+        sleep_ms(100)
 
         if snake.head == apple.points[0]:
             snake.eat()
