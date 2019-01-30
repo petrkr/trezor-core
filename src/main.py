@@ -58,9 +58,9 @@ class Snake(Tile):
 
         if ch == 'a':
             self.direction = [-1, 0]
-        elif ch == 's':
-            self.direction = [1, 0]
         elif ch == 'd':
+            self.direction = [1, 0]
+        elif ch == 's':
             self.direction = [0, 1]
         elif ch == 'w':
             self.direction = [0, -1]
